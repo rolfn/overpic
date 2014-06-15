@@ -1,0 +1,101 @@
+
+% opic-rel.tex 
+
+\documentclass[10pt,a4paper]{article}
+%\documentclass[10pt,letterpaper]{article}
+\usepackage{overpic}
+
+\setlength\parindent{0pt}
+
+\newlength\Li \newlength\Lii 
+\setlength\Li{55mm} \setlength\Lii{80mm} 
+
+\setlength\topmargin{-1in}
+\setlength\headheight{0pt}
+\setlength\headsep\headheight
+\setlength\textheight\paperheight
+\addtolength\textheight{-2\footskip}
+\setlength\textwidth{150mm}
+\setlength\oddsidemargin\paperwidth
+\addtolength\oddsidemargin{-\textwidth}
+\setlength\oddsidemargin{.5\oddsidemargin}
+\addtolength\oddsidemargin{-1in}
+\setlength\evensidemargin\oddsidemargin
+
+\newcommand\HFILL{\hspace*{\fill}}
+\newcommand\VFILL{\vspace*{\fill}}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\VFILL
+
+\section*{\centering The \texttt{overpic} environment with 
+  relative positioning\footnote{Version 0.5, Rolf Niepraschk, 
+  11/97, file: \texttt{overpic.sty}}}
+
+\HFILL
+\begin{minipage}{\Li}
+  \includegraphics[scale=.25]{golfer.ps}
+\end{minipage}\qquad
+\begin{minipage}{\Lii}
+  Insert before:
+  \begin{verbatim}
+\usepackage[percent]{overpic} 
+(default) or
+\usepackage[permil]{overpic} 
+  \end{verbatim}      
+  The  original graphic from \textsc{GhostScript}:
+  \begin{verbatim}
+\includegraphics[scale=.25]{golfer.ps}
+  \end{verbatim}  
+\end{minipage}
+\HFILL
+
+\VFILL
+
+\HFILL
+\begin{minipage}{\Li}
+  \begin{overpic}[scale=.25,grid,tics=10]{golfer.ps}
+  \end{overpic}  
+\end{minipage}\qquad
+\begin{minipage}{\Lii}
+  A grid for orientation:%  
+  \begin{verbatim}
+\begin{overpic}[scale=.25,grid,tics=10]%
+      {golfer.ps}
+\end{overpic}
+  \end{verbatim} 
+  (default for \texttt{tics} is 10 for `\texttt{percent}' and 100 for 
+   `\texttt{permil}')   
+\end{minipage}
+\HFILL
+
+\VFILL
+
+\HFILL
+\begin{minipage}{\Li}
+  \begin{overpic}[scale=.25]{golfer.ps}
+    \put(5,45){\huge \LaTeX}
+    \put(55,10){\includegraphics[scale=.07]%
+        {golfer.ps}}
+  \end{overpic}  
+\end{minipage}\qquad
+\begin{minipage}{\Lii}
+  Positioning the \LaTeX\ output with \verb#\put# commands:  
+  \begin{verbatim}
+\begin{overpic}[scale=.25]{golfer.ps}
+  \put(5,45){\huge \LaTeX}
+  \put(55,10){\includegraphics[scale=.07]%
+      {golfer.ps}}
+\end{overpic}
+  \end{verbatim}  
+  (\verb#\unitlength# is internally set to 1/100 or 1/1000 of the length of
+   the picture's longer side)
+\end{minipage}
+\HFILL
+
+\VFILL
+
+\end{document}

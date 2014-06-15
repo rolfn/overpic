@@ -1,0 +1,78 @@
+\documentclass[german, pagesize=auto, fontsize=12pt, parskip=half, DIV=11]{scrartcl}
+
+\usepackage{fixltx2e}
+\usepackage{etex}
+\usepackage{xspace}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{hyperref}
+
+\newcommand*{\mail}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand*{\pkg}[1]{\textsf{#1}}
+\newcommand*{\env}[1]{\texttt{#1}}
+\newsavebox{\tempbox}
+
+\addtokomafont{title}{\rmfamily}
+
+\title{Das Paket \pkg{overpic}\thanks{Dieses Handbuch bezieht sich auf \pkg{overpic}~v0.52 vom~4.~Juli~1999.}}
+\author{Rolf Niepraschk\thanks{\mail{niepraschk@ptb.de}}}
+\date{4.~Juli~1999}
+
+
+\begin{document}
+
+\maketitle
+
+\noindent
+
+\begin{quote}
+  \footnotesize
+  Copyright  1999 Rolf Niepraschk, \mail{niepraschk@ptb.de}\\
+  This program can be redistributed and/or modified under the terms
+  of the \LaTeX\ Project Public License Distributed from CTAN
+  archives in directory \href{http://ctan.org/macros/latex/base/lppl.txt}{\texttt{macros/latex/base\slash lppl.txt}}; either
+  version~1 of the License, or any later version.
+\end{quote}
+
+Dieses kleine \LaTeX-Paket definiert die \env{overpic}-Umgebung, welche eine
+Kombination von \env{picture}-Umgebung und \env{includegraphics}-Befehl ist. Die
+resultierende \env{picture}-Umgebung hat dieselbe Groesse wie die eingefuegte Grafik.
+Jetzt ist es einfach moeglich beliebige \LaTeX-Ausgaben auf das Bild zu
+positionieren. Ein Gitter kann zur Hilfe verwendet werden.
+
+\begin{lrbox}{\tempbox}
+  \begin{tabular}[b]{@{}l@{}}
+    \texttt{opic-rel.tex} \\
+    und                   \\
+    \texttt{opic-abs.tex}
+  \end{tabular}
+\end{lrbox}
+
+Das Verzeichnis enthaelt:
+%
+\begin{labeling}[\hspace{\labelsep}--]{\usebox{\tempbox}}
+\item[\texttt{README.de}] Diese Datei.
+\item[\texttt{README}] Das gleiche in englisch.
+\item[\texttt{overpic.sty}] Die Definition von \env{overpic}. Benoetigt \pkg{graphicx.sty} und \pkg{epic.sty}.
+\item[\usebox{\tempbox}] Zwei Testdateien, die alle Moeglichkeiten zeigen. Die Grafikdatei \texttt{golfer.ps} wird benoetigt. Sie ist in \textsc{ghostscript}s \texttt{examples}-Verzeichnis enthalten.
+\end{labeling}
+               
+Kommentare und Vorschlaege bitte an \mail{niepraschk@ptb.de} schicken.
+
+Happy \TeX ing\ldots
+
+\enlargethispage{\baselineskip}
+
+
+\minisec{Liste der Änderungen:}
+
+\begin{labeling}[\hspace{\labelsep}--]{v0.52, 1999/07/04}
+  \item[v0.51, 1999/03/02] New (LPPL) license
+  \item[v0.52, 1999/07/04] Correction of wrong height calculation (if $\mathrm{depth} \ne 0$)
+\end{labeling}
+
+\end{document}

@@ -1,19 +1,24 @@
 overpic – Combine LaTeX commands over included graphics
 =======================================================
 
-The over­pic en­vi­ron­ment is a cross be­tween the LaTeX pic­ture
-en­vi­ron­ment and the \in­clude­graph­ics com­mand of graph­icx. The
-re­sult­ing pic­ture en­vi­ron­ment has the same di­men­sions as the in­cluded
-graphic. LaTeX com­mands can be placed on the graphic at de­fined po­si­tions;
-a grid for ori­en­ta­tion is avail­able.
+The overpic environment is a cross between the LaTeX picture
+environment and the \includegraphics command of graphicx. The
+resulting picture environment has the same dimensions as the included
+graphic. LaTeX commands can be placed on the graphic at defined positions;
+a grid for orientation is available.
 
 Recommended TDS locations:
 ```
-   overpic.cls:                     tex/latex/overpic
-   overpic.pdf,overpic-manual.pdf:  doc/latex/overpic
+  overpic.sty:                                   tex/latex/overpic
+  README, README.de, opic-rel.tex, opic-abs.tex: doc/latex/overpic
 ```
 For general installation advice, see
 http://www.tex.ac.uk/cgi-bin/texfaq2html?label=instpackages
 
 The overpic document class is also on CTAN:[macros/latex/contrib/overpic](http://www.ctan.org/pkg/overpic)
 
+Send comments to Rolf.Niepraschk@gmx.de
+
+Happy TeXing...
+
+                                  Rolf Niepraschk, 2014/06/15

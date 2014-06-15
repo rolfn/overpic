@@ -1,0 +1,75 @@
+\documentclass[pagesize=auto, fontsize=12pt, parskip=half, DIV=11]{scrartcl}
+
+\usepackage{fixltx2e}
+\usepackage{etex}
+\usepackage{xspace}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{microtype}
+\usepackage{hyperref}
+
+\newcommand*{\mail}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand*{\pkg}[1]{\textsf{#1}}
+\newcommand*{\env}[1]{\texttt{#1}}
+\newsavebox{\tempbox}
+
+\addtokomafont{title}{\rmfamily}
+
+\title{The \pkg{overpic} package\thanks{This manual corresponds to \pkg{overpic}~v0.52, dated~1999/07/04.}}
+\author{Rolf Niepraschk\thanks{\mail{niepraschk@ptb.de}}}
+\date{1999/07/04}
+
+
+\begin{document}
+
+\maketitle
+
+\noindent
+
+\begin{quote}
+  \footnotesize
+  Copyright  1999 Rolf Niepraschk, \mail{niepraschk@ptb.de}\\
+  This program can be redistributed and/or modified under the terms
+  of the \LaTeX\ Project Public License Distributed from CTAN
+  archives in directory \href{http://ctan.org/macros/latex/base/lppl.txt}{\texttt{macros/latex/base\slash lppl.txt}}; either
+  version~1 of the License, or any later version.
+\end{quote}
+
+This small \LaTeX\ package defines the \env{overpic} environment which is
+a combination between a \env{picture} environment and an \env{includegraphics}
+command (defined in \pkg{graphicx}). The resulting \env{picture} environment has
+the same dimension as the included \textsc{eps} graphic. Now it is easy possible
+to put any \LaTeX\ output above the graphic on defined positions. A grid
+to aid is also possible.
+
+\begin{lrbox}{\tempbox}
+  \begin{tabular}[b]{@{}l@{}}
+    \texttt{opic-rel.tex} \\
+    and                   \\
+    \texttt{opic-abs.tex}
+  \end{tabular}
+\end{lrbox}
+
+This directory contains the following files:
+%
+\begin{labeling}[\hspace{\labelsep}--]{\usebox{\tempbox}}
+\item[\texttt{README}] This file.
+\item[\texttt{README.de}] The same in german.
+\item[\texttt{overpic.sty}] The definition of \env{overpic}. Required \env{graphicx.sty} and \env{epic.sty}.
+\item[\usebox{\tempbox}] Two demos that shows all the features. You need the \textsc{eps} graphic file \texttt{golfer.ps}. This file is part of \textsc{ghostscript}'s  \texttt{examples} directory.
+\end{labeling}
+               
+Please send comments and suggestions to \mail{niepraschk@ptb.de}.
+
+Happy \TeX ing\ldots
+
+
+\minisec{Changes:}
+
+\begin{labeling}[\hspace{\labelsep}--]{v0.52, 1999/07/04}
+  \item[v0.51, 1999/03/02] New (LPPL) license
+  \item[v0.52, 1999/07/04] Correction of wrong height calculation (if $\mathrm{depth} \ne 0$)
+\end{labeling}
+
+\end{document}
