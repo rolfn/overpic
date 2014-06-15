@@ -15,7 +15,7 @@ Recommended TDS locations:
 For general installation advice, see
 http://www.tex.ac.uk/cgi-bin/texfaq2html?label=instpackages
 
-The overpic document class is also on CTAN:[macros/latex/contrib/overpic](http://www.ctan.org/pkg/overpic)
+The overpic package is also on CTAN:[macros/latex/contrib/overpic](http://www.ctan.org/pkg/overpic)
 
 Send comments to Rolf.Niepraschk@gmx.de
 
