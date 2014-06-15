@@ -11,10 +11,10 @@ LATEX = latex
 VERSION = $(shell awk -F"[{}]" '/fileversion/ {print $$2}' $(MAIN).dtx)
 
 DIST_DIR = $(MAIN)
-DIST_FILES = $(MAIN).dtx $(MAIN).ins $(MAIN).pdf $(MAIN)-manual.pdf README
+DIST_FILES = README README.de $(MAIN).sty
 ARCHNAME = $(MAIN)-$(VERSION).zip
 
-all : $(MAIN).sty $(MAIN).pdf $(MAIN)-manual.pdf
+all : $(MAIN).sty
 
 $(MAIN).sty : $(MAIN).dtx
 	$(TEX) $(basename $<).ins
