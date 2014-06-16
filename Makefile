@@ -19,7 +19,7 @@ all : $(MAIN).sty
 $(MAIN).sty : $(MAIN).dtx
 	$(TEX) $(basename $<).ins
 
-$(MAIN)-manual.pdf : $(MAIN)-manual.tex $(MAIN).sty
+$(MAIN)-readme.pdf $(MAIN)-readme-de.pdf : $(MAIN)-readme.tex $(MAIN).sty
 	$(PDFLATEX) $<
 
 $(MAIN).pdf : $(MAIN).dtx

@@ -1,0 +1,205 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2014 by Rolf Niepraschk <Rolf.Niepraschk@gmx.de>
+% ---------------------------------------------------------------------------
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Rolf Niepraschk.
+%
+% This work consists of the files overpic.dtx and overpic.ins
+% and the derived filebase overpic.sty.
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{overpic.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{overpic}
+%<*package>
+    [2014/06/16 0.60 overlay to a graphic]
+%</package>
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{overpic}[2014/06/16]
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+  \DocInput{overpic.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{165}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+%
+% \changes{0.60}{2014/06/16}{Converted to DTX file}
+%
+% \DoNotIndex{\newcommand,\newenvironment}
+%
+% \providecommand*{\url}{\texttt}
+% \GetFileInfo{overpic.dtx}
+% \title{The \textsf{overpic} package}
+% \author{Rolf Niepraschk \\ \url{Rolf.Niepraschk@gmx.de}}
+% \date{\fileversion~from \filedate}
+%
+% \maketitle
+%
+% \section{Introduction}
+%
+% Put text here.
+%
+% \section{Usage}
+%
+% Put text here.
+%
+%
+%
+% \DescribeEnv{overpic}
+%
+
+%
+% \StopEventually{}
+%
+% \section{Implementation}
+%
+% \iffalse
+%<*package>
+% \fi
+%
+%
+% \begin{macro}{\OVP@scale}
+%    \begin{macrocode}
+\newcommand\OVP@scale{}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\DeclareOption{percent}{\renewcommand\OVP@scale{100}}
+\DeclareOption{permil}{\renewcommand\OVP@scale{\@m}}
+\DeclareOption{abs}{\renewcommand\OVP@scale{\z@}}
+\DeclareOption*{\PassOptionsToPackage{\CurrentOption}{graphicx}}
+\ExecuteOptions{percent}
+\ProcessOptions
+\RequirePackage{graphicx,epic}
+\newif\ifGin@grid
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\define@key{Gin}{grid}[true]{\lowercase{\Gin@boolkey{#1}}{grid}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\define@key{Gin}{tics}{\count@=#1}
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}
+\define@key{Gin}{unit}{\setlength{\@tempdima}{#1}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\ifnum\OVP@scale>\z@
+  \ifnum\OVP@scale=\@m
+    \typeout{overpic: relative positioning in permil}%
+  \else%
+    \typeout{overpic: relative positioning in percent}%
+  \fi%
+  \newcommand\OVP@calc{%
+    \ifnum\@tempcnta>\@tempcntb
+      \divide\@tempcnta by \OVP@scale
+      \setlength\unitlength{\@tempcnta sp}%
+      \@tempcnta=\OVP@scale
+      \divide\@tempcntb by \unitlength
+    \else
+      \divide\@tempcntb by \OVP@scale
+      \setlength\unitlength{\@tempcntb sp}%
+      \@tempcntb=\OVP@scale
+      \divide\@tempcnta by \unitlength
+    \fi
+    \ifnum\count@=\z@
+      \count@=\OVP@scale\divide\count@ by 10 %
+    \fi
+  }%
+\else%
+  \typeout{overpic: absolute positioning in \unitlength}%
+  \newcommand\OVP@calc{%
+    \setlength{\unitlength}{\@tempdima}%
+    \divide\@tempcnta by \unitlength
+    \divide\@tempcntb by \unitlength
+    \ifnum\count@=\z@\count@=10\fi
+  }%
+\fi%
+%    \end{macrocode}
+%
+% \begin{environment}{overpic}
+%    \begin{macrocode}
+\newenvironment{overpic}[2][]{%
+  \sbox{\z@}{\includegraphics[#1]{#2}}%
+  \settodepth{\@tempcnta}{\usebox{\z@}}%
+  \settoheight{\@tempcntb}{\usebox{\z@}}%
+  \advance\@tempcntb\@tempcnta
+  \settowidth{\@tempcnta}{\usebox{\z@}}%
+  \setlength{\@tempdima}{\unitlength}%
+  \count@=\z@\Gin@gridfalse\setkeys{Gin}{#1}%
+  \OVP@calc
+  \begin{picture}(\@tempcnta,\@tempcntb)%
+    \put(0,0){\makebox(0,0)[bl]{\usebox{\z@}}}%
+    \ifGin@grid
+      \put(0,0){\normalfont\fontsize\@viipt\@viiipt\selectfont
+        \grid(\@tempcnta,\@tempcntb)(\count@,\count@)[0,0]}%
+    \fi
+%    \end{macrocode}
+% reset the graphics parameter
+%    \begin{macrocode}
+    \let\Gin@outer@scalex\relax
+    \let\Gin@outer@scaley\relax
+    \let\Gin@angle\relax
+    \let\Gin@ewidth\Gin@exclamation
+    \let\Gin@eheight\Gin@ewidth
+    \def\Gin@scalex{1}
+    \let\Gin@scaley\Gin@exclamation
+}{%
+  \end{picture}%
+}%
+\endinput
+%    \end{macrocode}
+% \end{environment}
+%
+
+%
+% \iffalse
+%</package>
+% \fi
+%
+% \Finale
+\endinput
