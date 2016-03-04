@@ -11,7 +11,7 @@ LATEX = latex
 VERSION = $(shell awk -F"[{}]" '/fileversion/ {print $$2}' $(MAIN).dtx)
 
 DIST_DIR = $(MAIN)
-DIST_FILES = README README.de $(MAIN).sty
+DIST_FILES = README.md README.de.md $(MAIN).dtx $(MAIN).ins
 ARCHNAME = $(MAIN)-$(VERSION).zip
 
 all : $(MAIN).sty
@@ -38,6 +38,7 @@ $(MAIN).pdf : $(MAIN).dtx
      {print}' > $@
 
 dist : $(DIST_FILES)
+	rm -f $(DIST_DIR) $(ARCHNAME)
 	mkdir -p $(DIST_DIR)
 	cp -p $+ $(DIST_DIR)
 	zip $(ARCHNAME) -r $(DIST_DIR)
