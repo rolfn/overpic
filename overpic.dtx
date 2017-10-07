@@ -1,6 +1,6 @@
 % \iffalse meta-comment
 %
-% Copyright (C) 2016 by Rolf Niepraschk <Rolf.Niepraschk@gmx.de>
+% Copyright (C) 2017 by Rolf Niepraschk <Rolf.Niepraschk@gmx.de>
 % ---------------------------------------------------------------------------
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -20,18 +20,24 @@
 % \fi
 %
 % \iffalse
+%<*driver>
+\ProvidesFile{overpic.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<package>\ProvidesPackage{overpic}
 %<*package>
-\NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2016/03/04 0.61 overlay to a graphic]
+    [2017/10/06 1.0a picture overlays]
 %</package>
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{overpic}[2014/06/16]
+\usepackage{overpic}[2017/10/06]
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 \begin{document}
+  \setlength\parindent{0pt}
+  \setlength\parskip{.5\baselineskip}
   \DocInput{overpic.dtx}
   \PrintChanges
   \PrintIndex
@@ -39,7 +45,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{165}
+% \CheckSum{171}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -72,17 +78,53 @@
 %
 % \section{Introduction}
 %
-% Put text here.
+% The overpic environment is a cross between the LaTeX picture
+% environment and the \cmd{\includegraphics} command of graphicx. The
+% resulting picture environment has the same dimensions as the included
+% graphic. \LaTeX\ commands can be placed on the graphic at defined positions;
+% a grid for orientation is available.
 %
 % \section{Usage}
 %
-% Put text here.
-%
-%
+% Put \verb|\usepackage[...]{overpic}| in the preamble of the document.
+% The following package options are possible: 
+% \begin{itemize}
+%   \item \verb|abs|: Absolute positioning in multiples of \cmd{\unitlength}.
+%   \item \verb|percent|: Relative positioning; the longer dimension has
+%     value 100. The \cmd{\unitlength} will be calculated accordingly. This
+%     is the default mode.
+%   \item \verb|permil|: Relative positioning; the longer dimension has
+%     value 1000. The \cmd{\unitlength} will be calculated accordingly.
+% \end{itemize}
 %
 % \DescribeEnv{overpic}
+% |\begin{overpic} [|\meta{options}|]{|\meta{filename}|}| \meta{picture code}
+%  |\end{overpic}| \par
+% Sets the graphic \meta{filename} and puts the \meta{picture code} on the
+% top of the graphic. The picture code can be any \TeX\ code inclusive other
+% graphics.
 %
-
+% The following options are possible:
+% \begin{itemize}
+%   \item \verb|abs|, \verb|percent|, \verb|permil|: The same as the package
+%     options (true or false).
+%   \item \verb|rel|: Other value as base for relative positioning
+%     (e.g. 10000)
+%   \item \verb|grid|: Drawing a grid for better orientation (true or false,
+%     default: false).
+%   \item \verb|tics|: The distance of the grid tics (default: 10).
+%   \item \verb|unit|: Sets \cmd{\unitlength} (any \TeX\ dimension, only
+%     effective in abs mode).
+% \end{itemize}
+% \DescribeEnv{Overpic}
+% |\begin{Overpic} [|\meta{options}|]{|\meta{\TeX\ code}|}|
+%  \meta{picture code} |\end{Overpic}| \par
+%  Similar to environment \verb|overpic| but instead of a graphic any
+%  \TeX\ code (e.g. a table) is set as basement of the following picture
+%  overlay.
+%
+% \section{Examples}
+%  \dots
 %
 % \StopEventually{}
 %
@@ -91,107 +133,137 @@
 % \iffalse
 %<*package>
 % \fi
-%
+%    \begin{macrocode}
+\RequirePackage{graphicx,epic}
+%    \end{macrocode}
 %
 % \begin{macro}{\OVP@scale}
+% Reference value for rel mode, "100" (percent) and "1000" (permil)
 %    \begin{macrocode}
-\newcommand\OVP@scale{}
+\newcommand*\OVP@scale{\z@}
 %    \end{macrocode}
 % \end{macro}
-%
+% All the keys. 
 %    \begin{macrocode}
-\DeclareOption{percent}{\renewcommand\OVP@scale{100}}
-\DeclareOption{permil}{\renewcommand\OVP@scale{\@m}}
-\DeclareOption{abs}{\renewcommand\OVP@scale{\z@}}
+\define@key{Gin}{rel}{%
+  \def\OVP@scale{#1}%
+  \ifnum\OVP@scale>\z@
+    \let\OVP@calc\OVP@calc@rel
+  \else
+    \PackageError{overpic}{Invalid number for option `rel'}\@ehc
+  \fi
+}
+\define@key{Gin}{percent}[]{%
+  \setkeys{Gin}{rel=100}%
+}
+\define@key{Gin}{permil}[]{%
+  \setkeys{Gin}{rel=\@m}%
+}
+\define@key{Gin}{abs}[]{%
+  \let\OVP@calc\OVP@calc@abs
+}
+\newif\ifGin@grid
+\define@key{Gin}{grid}[true]{\lowercase{\Gin@boolkey{#1}}{grid}}
+\define@key{Gin}{tics}{\count@=#1}
+\define@key{Gin}{unit}{\unitlength=\dimexpr#1\relax}
+%    \end{macrocode}
+% \begin{macro}{\OVP@calc@abs}
+% Some calculations in abs mode. \cmd{\@tempcnta} is the normalized width
+% and \cmd{\@tempcntb} is the normalized height. \cmd{\count@} is the
+% tics value.
+%    \begin{macrocode}
+\newcommand*\OVP@calc@abs{%
+  \divide\@tempcnta by \unitlength
+  \divide\@tempcntb by \unitlength
+  \ifnum\count@=\z@\count@=10\fi
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\OVP@calc@rel}
+% Some calculations in rel mode. The bigger value of width or height
+% is the base.
+%    \begin{macrocode}
+\newcommand*\OVP@calc@rel{%
+  \ifnum\@tempcnta>\@tempcntb
+    \divide\@tempcnta by \OVP@scale
+    \unitlength=\@tempcnta sp %
+    \@tempcnta=\OVP@scale
+    \divide\@tempcntb by \unitlength
+  \else
+    \divide\@tempcntb by \OVP@scale
+    \unitlength=\@tempcntb sp %
+    \@tempcntb=\OVP@scale
+    \divide\@tempcnta by \unitlength
+  \fi
+  \ifnum\count@=\z@
+    \count@=\OVP@scale
+    \divide\count@ by 10 %
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+% The package options set the defaults.
+%    \begin{macrocode}
+\DeclareOption{percent}{\setkeys{Gin}{rel=100}}
+\DeclareOption{permil}{\setkeys{Gin}{rel=\@m}}
+\DeclareOption{abs}{\setkeys{Gin}{abs}}
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{graphicx}}
 \ExecuteOptions{percent}
 \ProcessOptions
-\RequirePackage{graphicx,epic}
-\newif\ifGin@grid
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\define@key{Gin}{grid}[true]{\lowercase{\Gin@boolkey{#1}}{grid}}
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\define@key{Gin}{tics}{\count@=#1}
-%    \end{macrocode}
-%
-%
-%    \begin{macrocode}
-\define@key{Gin}{unit}{\setlength{\@tempdima}{#1}}
-%    \end{macrocode}
-%
-%    \begin{macrocode}
-\ifnum\OVP@scale>\z@
-  \ifnum\OVP@scale=\@m
-    \typeout{overpic: relative positioning in permil}%
-  \else%
-    \typeout{overpic: relative positioning in percent}%
-  \fi%
-  \newcommand\OVP@calc{%
-    \ifnum\@tempcnta>\@tempcntb
-      \divide\@tempcnta by \OVP@scale
-      \setlength\unitlength{\@tempcnta sp}%
-      \@tempcnta=\OVP@scale
-      \divide\@tempcntb by \unitlength
-    \else
-      \divide\@tempcntb by \OVP@scale
-      \setlength\unitlength{\@tempcntb sp}%
-      \@tempcntb=\OVP@scale
-      \divide\@tempcnta by \unitlength
-    \fi
-    \ifnum\count@=\z@
-      \count@=\OVP@scale\divide\count@ by 10 %
-    \fi
-  }%
-\else%
-  \typeout{overpic: absolute positioning in \unitlength}%
-  \newcommand\OVP@calc{%
-    \setlength{\unitlength}{\@tempdima}%
-    \divide\@tempcnta by \unitlength
-    \divide\@tempcntb by \unitlength
-    \ifnum\count@=\z@\count@=10\fi
-  }%
-\fi%
 %    \end{macrocode}
 %
 % \begin{environment}{overpic}
+% Box 0 gets a graphic.
 %    \begin{macrocode}
 \newenvironment{overpic}[2][]{%
-  \sbox{\z@}{\includegraphics[#1]{#2}}%
-  \settodepth{\@tempcnta}{\usebox{\z@}}%
-  \settoheight{\@tempcntb}{\usebox{\z@}}%
+  \sbox\z@{\includegraphics[#1]{#2}}%
+%    \end{macrocode}
+% reset the graphics parameter
+%    \begin{macrocode}
+  \let\Gin@outer@scalex\relax
+  \let\Gin@outer@scaley\relax
+  \let\Gin@angle\relax
+  \let\Gin@ewidth\Gin@exclamation
+  \let\Gin@eheight\Gin@ewidth
+  \def\Gin@scalex{1}%
+  \let\Gin@scaley\Gin@exclamation
+  \OVP@picture{#1}%
+}{\endpicture}
+%    \end{macrocode}
+% \end{environment}
+% \begin{environment}{Overpic}
+% Box 0 gets any \TeX\ code.
+%    \begin{macrocode}
+\newenvironment{Overpic}[2][]{%
+  \sbox\z@{#2}%
+  \OVP@picture{#1}%
+}{\endpicture}
+%    \end{macrocode}
+% \end{environment}
+% \begin{macro}{\OVP@picture}
+% Put box 0 and an optionally grid at the lower left corner of a
+% picture environment. 
+%    \begin{macrocode}
+\newcommand*\OVP@picture[1]{%
+  \settodepth{\@tempcnta}{\usebox\z@}%
+  \settoheight{\@tempcntb}{\usebox\z@}%
   \advance\@tempcntb\@tempcnta
-  \settowidth{\@tempcnta}{\usebox{\z@}}%
-  \setlength{\@tempdima}{\unitlength}%
-  \count@=\z@\Gin@gridfalse\setkeys{Gin}{#1}%
+  \settowidth{\@tempcnta}{\usebox\z@}%
+  \count@=\z@ \Gin@gridfalse
+  \setkeys{Gin}{#1}%
   \OVP@calc
-  \begin{picture}(\@tempcnta,\@tempcntb)%
-    \put(0,0){\makebox(0,0)[bl]{\usebox{\z@}}}%
+  \picture(\@tempcnta,\@tempcntb)%
+    \put(0,0){\makebox(0,0)[bl]{\usebox\z@}}%
     \ifGin@grid
       \put(0,0){\normalfont\fontsize\@viipt\@viiipt\selectfont
         \grid(\@tempcnta,\@tempcntb)(\count@,\count@)[0,0]}%
     \fi
+}
 %    \end{macrocode}
-% reset the graphics parameter
+% \end{macro}
 %    \begin{macrocode}
-    \let\Gin@outer@scalex\relax
-    \let\Gin@outer@scaley\relax
-    \let\Gin@angle\relax
-    \let\Gin@ewidth\Gin@exclamation
-    \let\Gin@eheight\Gin@ewidth
-    \def\Gin@scalex{1}%
-    \let\Gin@scaley\Gin@exclamation
-}{%
-  \end{picture}%
-}%
 \endinput
 %    \end{macrocode}
-% \end{environment}
-%
-
 %
 % \iffalse
 %</package>
