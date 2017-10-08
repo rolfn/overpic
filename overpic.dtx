@@ -49,7 +49,7 @@
   backgroundcolor=\color{black!10},
   keepspaces,
   numbers=none,
-  aboveskip=.5\myparskip,
+  aboveskip=\myparskip,
   belowskip=\myparskip,
   framesep=\fboxsep,
   frame=single
@@ -99,7 +99,7 @@
 %
 % \section{Introduction}
 %
-% The overpic environment is a combination between the LaTeX picture
+% The overpic environment is a combination between the \LaTeX\ picture
 % environment and another \LaTeX\ object like an image used with the
 % command \cmd{\includegraphics} of graphicx or a tabular. The
 % resulting picture environment has the same dimensions as the included
@@ -154,6 +154,8 @@
 %
 % The graphic (\texttt{golfer.eps}) in the following examples is
 % part of the program \texttt{ghostscript} and must be accesible to \TeX{}.
+% To use the command \cmd{\color} the package |xcolor| (or |color|) must
+% be loaded.
 %
 % \subsection{Environment ``overpic'' (absolute positioning)}
 %
@@ -186,6 +188,9 @@
 % \end{overpic}
 %  
 % \subsection{Environment ``Overpic'' (absolute positioning)}
+%
+% To use the picture command \cmd{\polygon} the package |pict2e| must
+% be loaded.
 %
 % \begin{lstlisting}
 % \begin{Overpic}[abs,unit=1mm,grid=true,tics=5]{%
