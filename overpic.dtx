@@ -99,16 +99,17 @@
 %
 % \section{Introduction}
 %
-% The overpic environment is a cross between the LaTeX picture
-% environment and the \cmd{\includegraphics} command of graphicx. The
+% The overpic environment is a combination between the LaTeX picture
+% environment and another \LaTeX\ object like an image used with the
+% command \cmd{\includegraphics} of graphicx or a tabular. The
 % resulting picture environment has the same dimensions as the included
-% graphic. \LaTeX\ commands can be placed on the graphic at defined positions;
-% a grid for orientation is available.
+% object. \LaTeX\ commands can be placed on the object at any position;
+% setting a grid for the orientation is possible.
 %
 % \section{Usage}
 %
 % Put |\usepackage[|\meta{options}|]{overpic}| in the preamble of the document.
-% The following package options are possible: 
+% The following package options are available: 
 % \begin{itemize}
 %   \item |abs|: Absolute positioning in multiples of \cmd{\unitlength}.
 %   \item |percent|: Relative positioning; the longer dimension has
@@ -142,7 +143,7 @@
 % |\begin{Overpic}[|\meta{options}|]{|\meta{\TeX\ code}|}|
 %  \meta{picture code} |\end{Overpic}| \par
 %  Similar to environment |overpic| but instead of a graphic any
-%  \TeX\ code (e.g. a table) is set as basement of the following picture
+%  \TeX\ code (e.g. a tabular) is set as basement of the following picture
 %  overlay.
 %
 % \DescribeMacro\setOverpic
