@@ -19,7 +19,7 @@
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2017/10/06 1.0 picture overlays]
+\ProvidesPackage{overpic}[2017/10/06 1.0 picture overlays (RN)]
 %</package>
 %
 %<*driver>
@@ -244,12 +244,12 @@
 %    \end{macrocode}
 %
 % \begin{macro}{\OVP@scale}
-% Reference value for rel mode, "100" (percent) and "1000" (permil)
+% Reference value for rel mode (percent: 100, permil: 1000)
 %    \begin{macrocode}
 \newcommand*\OVP@scale{\z@}
 %    \end{macrocode}
 % \end{macro}
-% All the keys. 
+% All the keys: 
 %    \begin{macrocode}
 \define@key{Gin}{rel}{%
   \def\OVP@scale{#1}%
@@ -309,7 +309,7 @@
 }
 %    \end{macrocode}
 % \end{macro}
-% The package options set the defaults.
+% The package options set the defaults:
 %    \begin{macrocode}
 \DeclareOption{percent}{\setkeys{Gin}{rel=100}}
 \DeclareOption{permil}{\setkeys{Gin}{rel=\@m}}
@@ -325,7 +325,7 @@
 \newenvironment{overpic}[2][]{%
   \sbox\z@{\includegraphics[#1]{#2}}%
 %    \end{macrocode}
-% reset the graphics parameter
+% Reset the graphics parameter:
 %    \begin{macrocode}
   \let\Gin@outer@scalex\relax
   \let\Gin@outer@scaley\relax
