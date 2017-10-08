@@ -1,25 +1,20 @@
-overpic – LaTeX-Anweisungen auf eingefügten Grafiken
-====================================================
+overpic – Kombination von LaTeX-Anweisungen über eingefügte Grafiken
+====================================================================
 
-Dieses kleine LaTeX-Paket definiert die overpic-Umgebung, welche eine
-Kombination von picture-Umgebung und includegraphics-Befehl ist. Die
-resultierende picture-Umgebung hat dieselbe Grösse wie die eingefügte Grafik.
-Jetzt ist es einfach möglich beliebige LaTeX-Ausgaben auf das Bild zu
-positionieren. Ein Gitter kann zur Hilfe verwendet werden.
+Die overpic-Umgebung ist eine Kombination der picture-Umgebung mit anderen
+LaTeX-Objekten wie Grafiken oder Tabellen. Die resultierende picture-Umgebung
+hat dieselben Abmessungen wie das darunterliegende Objekt. LaTeX-Anweisungen
+können an beliebigen Positionen platziert werden; eine Gitternetz zur
+besseren Orientierung kann angezeigt werden.
 
-Das Verzeichnis enthält:
-
-README.de    - Diese Datei.
-README       - Das gleiche in englisch.
-overpic.sty  - Die Definition von overpic. Benötigt graphicx.sty und epic.sty.
-opic-rel.tex
-und
-opic-abs.tex - Zwei Testdateien, die alle Möglichkeiten zeigen. Die Grafikdatei
-               golfer.ps wird benötigt. Sie ist in ghostscripts examples-Ver-
-               zeichnis enthalten.
+Empfohlene TDS-Orte:
+```
+  overpic.sty:                          tex/latex/overpic
+  README.md, README.de.md, overpic.pdf: doc/latex/overpic
+``` 
 
 Kommentare und Vorschläge bitte an Rolf.Niepraschk@gmx.de schicken.
 
 Happy TeXing...
 
-                                  Rolf Niepraschk, 2014/06/15
+                                  Rolf Niepraschk, 2017/10/08

@@ -17,22 +17,15 @@
 % This work consists of the files overpic.dtx and overpic.ins
 % and the derived filebase overpic.sty.
 %
-% \fi
-%
-% \iffalse
-%<*driver>
-\ProvidesFile{overpic.dtx}
-%</driver>
-%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
-%<package>\ProvidesPackage{overpic}
 %<*package>
-    [2017/10/06 1.0 picture overlays]
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+\ProvidesPackage{overpic}[2017/10/06 1.0 picture overlays]
 %</package>
 %
 %<*driver>
+\ProvidesFile{overpic.dtx}
 \documentclass{ltxdoc}
-\usepackage{overpic}[2017/10/06]
-\usepackage{pict2e,xcolor}
+\usepackage{overpic,pict2e,xcolor}
 \usepackage{lmodern}
 \usepackage{listings}
 \setlength\parindent{0pt}
@@ -90,10 +83,10 @@
 % \DoNotIndex{\newcommand,\newenvironment}
 %
 % \providecommand*{\url}{\texttt}
-% \GetFileInfo{overpic.dtx}
+% \GetFileInfo{overpic.sty}
 % \title{The \textsf{overpic} package}
-% \author{Rolf Niepraschk \\ \url{Rolf.Niepraschk@gmx.de}}
-% \date{\fileversion~from \filedate}
+% \author{Rolf Niepraschk \\ (\url{Rolf.Niepraschk@gmx.de)}}
+% \date{Version~\fileversion~--~\filedate}
 %
 % \maketitle
 %

@@ -8,10 +8,10 @@ PDFLATEX = pdflatex
 TEX = tex
 LATEX = latex
 
-VERSION = $(shell awk -F"[{}]" '/fileversion/ {print $$2}' $(MAIN).dtx)
+VERSION = $(shell awk '/ProvidesPackage/ {print $$2}' $(MAIN).dtx)
 
 DIST_DIR = $(MAIN)
-DIST_FILES = README.md README.de.md $(MAIN).dtx $(MAIN).ins
+DIST_FILES = README.md README.de.md $(MAIN).pdf $(MAIN).dtx $(MAIN).ins
 ARCHNAME = $(MAIN)-$(VERSION).zip
 
 all : $(MAIN).sty
@@ -32,11 +32,6 @@ $(MAIN).pdf : $(MAIN).dtx
 	$(PDFLATEX) $<
 	$(PDFLATEX) $<
 
-% : %.md
-	cat $< | awk '/^```/ {$$0=""} \
-     /is also/ {exit} \
-     {print}' > $@
-
 dist : $(DIST_FILES)
 	rm -f $(DIST_DIR) $(ARCHNAME)
 	mkdir -p $(DIST_DIR)
@@ -48,7 +43,7 @@ clean :
 	$(RM) *.aux *.log *.glg *.glo *.gls *.idx *.ilg *.ind *.toc
 
 veryclean : clean
-	$(RM) $(MAIN).pdf $(MAIN)-manual.pdf $(MAIN).sty README $(ARCHNAME)
+	$(RM) $(MAIN).pdf $(MAIN).sty $(ARCHNAME)
 
 debug :
 	@echo $(ARCHNAME)
