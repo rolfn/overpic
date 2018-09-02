@@ -19,7 +19,7 @@
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2017/10/08 1.1 picture overlays (RN)]
+\ProvidesPackage{overpic}[2018/09/02 1.2 picture overlays (RN)]
 %</package>
 %
 %<*driver>
@@ -58,7 +58,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{174}
+% \CheckSum{176}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -317,13 +317,18 @@
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{graphicx}}
 \ExecuteOptions{percent}
 \ProcessOptions
+\newsavebox\OVP@box
 %    \end{macrocode}
 %
 % \begin{environment}{overpic}
 % Box 0 gets a graphic.
+% \changes{1.2}{2018/09/02}{Wrong place of \cmd\setkeys
+%   (bug report from 'aminophen')}
 %    \begin{macrocode}
 \newenvironment{overpic}[2][]{%
-  \sbox\z@{\includegraphics[#1]{#2}}%
+  \sbox\OVP@box{\includegraphics[#1]{#2}}%
+  \count@=\z@ \Gin@gridfalse
+  \setkeys{Gin}{#1}%
 %    \end{macrocode}
 % Reset the graphics parameter:
 %    \begin{macrocode}
@@ -343,25 +348,23 @@
 % Box 0 gets any \TeX\ code.
 %    \begin{macrocode}
 \newenvironment{Overpic}[2][]{%
-  \sbox\z@{#2}%
+  \sbox\OVP@box{#2}%
   \OVP@picture{#1}%
 }{\endpicture}
 %    \end{macrocode}
 % \end{environment}
 % \begin{macro}{\OVP@picture}
-% Put box 0 and an optionally grid at the lower left corner of a
+% Put box 0 and and optionally grid at the lower left corner of a
 % picture environment. 
 %    \begin{macrocode}
 \newcommand*\OVP@picture[1]{%
-  \settodepth{\@tempcnta}{\usebox\z@}%
-  \settoheight{\@tempcntb}{\usebox\z@}%
+  \settodepth{\@tempcnta}{\usebox\OVP@box}%
+  \settoheight{\@tempcntb}{\usebox\OVP@box}%
   \advance\@tempcntb\@tempcnta
-  \settowidth{\@tempcnta}{\usebox\z@}%
-  \count@=\z@ \Gin@gridfalse
-  \setkeys{Gin}{#1}%
+  \settowidth{\@tempcnta}{\usebox\OVP@box}%
   \OVP@calc
   \picture(\@tempcnta,\@tempcntb)%
-    \put(0,0){\makebox(0,0)[bl]{\usebox\z@}}%
+    \put(0,0){\makebox(0,0)[bl]{\usebox\OVP@box}}%
     \ifGin@grid
       \put(0,0){\normalfont\fontsize\@viipt\@viiipt\selectfont
         \grid(\@tempcnta,\@tempcntb)(\count@,\count@)[0,0]}%
