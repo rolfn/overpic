@@ -19,7 +19,7 @@
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2018/09/02 1.2 picture overlays (RN)]
+\ProvidesPackage{overpic}[2020/02/22 1.3 picture overlays (RN)]
 %</package>
 %
 %<*driver>
@@ -58,7 +58,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{176}
+% \CheckSum{180}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -202,6 +202,7 @@
 %
 % \begin{lstlisting}
 % \begin{Overpic}[abs,unit=1mm,grid=true,tics=5]{%
+%   \bfseries\sffamily
 %   \begin{tabular}{*{8}{p{8mm}}}
 %   H  &    &    &    &    &    &    & He\\
 %   Li & Be & B  & C  & N  & O  & F  & Ne\\
@@ -211,13 +212,14 @@
 %   Cs & Ba & Tl & Pb & Bi & Po & At & Rn\\
 %   Fr & Ra & 112&    & 114&    &    &\\
 %   \end{tabular}}%
-%   \linethickness{0.5mm} \color{blue}%
-%   \put(0,0){\polygon(0,30)(10,30)(10,21.5)(44,21.5)(44,13.5)%
-%     (22,13.5)(22,4.5)(0,4.5)}
+%   \put(0,0){\color{blue}\linethickness{0.5mm}
+%     \polygon(0,30)(10,30)(10,21.5)(45,21.5)(45,13)(22,13)%
+%       (22,4.5)(0,4.5)}
 % \end{Overpic}  
 % \end{lstlisting}
 % \par\medskip\pagebreak[3]
 % \begin{Overpic}[abs,unit=1mm,grid=true,tics=5]{%
+%   \bfseries\sffamily
 %   \begin{tabular}{*{8}{p{8mm}}}
 %   H  &    &    &    &    &    &    & He\\
 %   Li & Be & B  & C  & N  & O  & F  & Ne\\
@@ -227,10 +229,10 @@
 %   Cs & Ba & Tl & Pb & Bi & Po & At & Rn\\
 %   Fr & Ra & 112&    & 114&    &    &\\
 %   \end{tabular}}%
-%   \linethickness{0.5mm} \color{blue}%
-%   \put(0,0){\polygon(0,30)(10,30)(10,21.5)(44,21.5)(44,13.5)%
-%     (22,13.5)(22,4.5)(0,4.5)}
-% \end{Overpic} 
+%   \put(0,0){\color{blue}\linethickness{0.5mm}
+%     \polygon(0,30)(10,30)(10,21.5)(45,21.5)(45,13)(22,13)%
+%       (22,4.5)(0,4.5)}
+% \end{Overpic}  
 %
 % \StopEventually{}
 %
@@ -345,10 +347,13 @@
 % \end{environment}
 % \begin{environment}{Overpic}
 % \changes{1.0}{2017/10/06}{Suggested by \mbox{Herbert Vo\ss}}
+% \changes{1.3}{2020/02/22}{Added missing \cmd\setkeys}
 % Box 0 gets any \TeX\ code.
 %    \begin{macrocode}
 \newenvironment{Overpic}[2][]{%
   \sbox\OVP@box{#2}%
+  \count@=\z@ \Gin@gridfalse
+  \setkeys{Gin}{#1}%  
   \OVP@picture{#1}%
 }{\endpicture}
 %    \end{macrocode}
