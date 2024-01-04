@@ -1,4 +1,4 @@
-# Rolf Niepraschk, 2014-06-15, Rolf.Niepraschk@gmx.de
+# Rolf Niepraschk, 2024-01-04, Rolf.Niepraschk@gmx.de
 
 .SUFFIXES : .tex .ltx .dvi .ps .pdf .eps
 
@@ -33,7 +33,7 @@ $(MAIN).pdf : $(MAIN).dtx
 	$(PDFLATEX) $<
 
 dist : $(DIST_FILES)
-	rm -f $(DIST_DIR) $(ARCHNAME)
+	rm -rf $(DIST_DIR) $(ARCHNAME)
 	mkdir -p $(DIST_DIR)
 	cp -p $+ $(DIST_DIR)
 	zip $(ARCHNAME) -r $(DIST_DIR)
