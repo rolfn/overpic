@@ -19,7 +19,7 @@
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2020/02/22 1.3 picture overlays (RN)]
+\ProvidesPackage{overpic}[2024/01/04 2.0 picture overlays (RN)]
 %</package>
 %
 %<*driver>
@@ -58,7 +58,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{180}
+% \CheckSum{178}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -242,7 +242,7 @@
 %<*package>
 % \fi
 %    \begin{macrocode}
-\RequirePackage{graphicx,epic}
+\RequirePackage{keyval,graphicx,epic}
 %    \end{macrocode}
 %
 % \begin{macro}{\OVP@scale}
@@ -253,7 +253,7 @@
 % \end{macro}
 % All the keys: 
 %    \begin{macrocode}
-\define@key{Gin}{rel}{%
+\define@key{OVP}{rel}{%
   \def\OVP@scale{#1}%
   \ifnum\OVP@scale>\z@
     \let\OVP@calc\OVP@calc@rel
@@ -261,19 +261,21 @@
     \PackageError{overpic}{Invalid number for option `rel'}\@ehc
   \fi
 }
-\define@key{Gin}{percent}[]{%
-  \setkeys{Gin}{rel=100}%
+\define@key{OVP}{percent}[]{%
+  \setkeys{OVP}{rel=100}%
 }
-\define@key{Gin}{permil}[]{%
-  \setkeys{Gin}{rel=\@m}%
+\define@key{OVP}{permil}[]{%
+  \setkeys{OVP}{rel=\@m}%
 }
-\define@key{Gin}{abs}[]{%
+\define@key{OVP}{abs}[]{%
   \let\OVP@calc\OVP@calc@abs
 }
-\newif\ifGin@grid
-\define@key{Gin}{grid}[true]{\lowercase{\Gin@boolkey{#1}}{grid}}
-\define@key{Gin}{tics}{\count@=#1}
-\define@key{Gin}{unit}{\unitlength=\dimexpr#1\relax}
+\def\OVP@boolkey#1#2{%
+  \csname OVP@#2\ifx\relax#1\relax true\else#1\fi\endcsname}
+\newif\ifOVP@grid
+\define@key{OVP}{grid}[true]{\lowercase{\OVP@boolkey{#1}}{grid}}
+\define@key{OVP}{tics}{\count@=#1}
+\define@key{OVP}{unit}{\unitlength=\dimexpr#1\relax}
 %    \end{macrocode}
 % \begin{macro}{\OVP@calc@abs}
 % Some calculations in abs mode. \cmd{\@tempcnta} is the normalized width
@@ -287,6 +289,8 @@
 }
 %    \end{macrocode}
 % \end{macro}
+% \changes{2.0}{2024/01/01}{Use a separate namespace for the keys to avoid
+%   unfavorable influence on \cmd\includegraphics.}
 % \begin{macro}{\OVP@calc@rel}
 % Some calculations in rel mode. The bigger value of width or height
 % is the base.
@@ -313,9 +317,9 @@
 % \end{macro}
 % The package options set the defaults:
 %    \begin{macrocode}
-\DeclareOption{percent}{\setkeys{Gin}{rel=100}}
-\DeclareOption{permil}{\setkeys{Gin}{rel=\@m}}
-\DeclareOption{abs}{\setkeys{Gin}{abs}}
+\DeclareOption{percent}{\setkeys{OVP}{rel=100}}
+\DeclareOption{permil}{\setkeys{OVP}{rel=\@m}}
+\DeclareOption{abs}{\setkeys{OVP}{abs}}
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{graphicx}}
 \ExecuteOptions{percent}
 \ProcessOptions
@@ -323,24 +327,24 @@
 %    \end{macrocode}
 %
 % \begin{environment}{overpic}
-% Box 0 gets a graphic.
+% Box \cmd{\OVP@box} gets a graphic.
 % \changes{1.2}{2018/09/02}{Wrong place of \cmd\setkeys
 %   (bug report from 'aminophen')}
+% \changes{2.0}{2024/01/04}{Better key handling}
 %    \begin{macrocode}
 \newenvironment{overpic}[2][]{%
-  \sbox\OVP@box{\includegraphics[#1]{#2}}%
-  \count@=\z@ \Gin@gridfalse
-  \setkeys{Gin}{#1}%
+  \let\OVP@temp=\KV@errx
 %    \end{macrocode}
-% Reset the graphics parameter:
+% Silently ignore unknown keys.
 %    \begin{macrocode}
-  \let\Gin@outer@scalex\relax
-  \let\Gin@outer@scaley\relax
-  \let\Gin@angle\relax
-  \let\Gin@ewidth\Gin@exclamation
-  \let\Gin@eheight\Gin@exclamation
-  \def\Gin@scalex{1}%
-  \let\Gin@scaley\Gin@exclamation
+  \let\KV@errx\@gobble
+  \sbox\OVP@box{\includegraphics[#1]{#2}}%
+  \count@=\z@ \OVP@gridfalse
+  \setkeys{OVP}{#1}%
+%    \end{macrocode}
+% Reset to previous state.
+%    \begin{macrocode}
+  \let\KV@errx\OVP@temp
   \OVP@picture{#1}%
 }{\endpicture}
 %    \end{macrocode}
@@ -348,18 +352,18 @@
 % \begin{environment}{Overpic}
 % \changes{1.0}{2017/10/06}{Suggested by \mbox{Herbert Vo\ss}}
 % \changes{1.3}{2020/02/22}{Added missing \cmd\setkeys}
-% Box 0 gets any \TeX\ code.
+% Box \cmd{\OVP@box} gets any \TeX\ code.
 %    \begin{macrocode}
 \newenvironment{Overpic}[2][]{%
   \sbox\OVP@box{#2}%
-  \count@=\z@ \Gin@gridfalse
-  \setkeys{Gin}{#1}%  
+  \count@=\z@ \OVP@gridfalse
+  \setkeys{OVP}{#1}%  
   \OVP@picture{#1}%
 }{\endpicture}
 %    \end{macrocode}
 % \end{environment}
 % \begin{macro}{\OVP@picture}
-% Put box 0 and and optionally grid at the lower left corner of a
+% Put box \cmd{\OVP@box} and a optionally grid at the lower left corner of a
 % picture environment. 
 %    \begin{macrocode}
 \newcommand*\OVP@picture[1]{%
@@ -370,7 +374,7 @@
   \OVP@calc
   \picture(\@tempcnta,\@tempcntb)%
     \put(0,0){\makebox(0,0)[bl]{\usebox\OVP@box}}%
-    \ifGin@grid
+    \ifOVP@grid
       \put(0,0){\normalfont\fontsize\@viipt\@viiipt\selectfont
         \grid(\@tempcnta,\@tempcntb)(\count@,\count@)[0,0]}%
     \fi
@@ -381,7 +385,7 @@
 % Sets new defaults.
 %    \begin{macrocode}
 \newcommand*\setOverpic[1]{%
-  \setkeys{Gin}{#1}%
+  \setkeys{OVP}{#1}%
 }
 %    \end{macrocode}
 % \end{macro}
