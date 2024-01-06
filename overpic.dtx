@@ -19,7 +19,7 @@
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2024/01/04 2.0 picture overlays (RN)]
+\ProvidesPackage{overpic}[2024/01/06 2.1 picture overlays (RN)]
 %</package>
 %
 %<*driver>
@@ -58,7 +58,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{178}
+% \CheckSum{199}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -289,7 +289,7 @@
 }
 %    \end{macrocode}
 % \end{macro}
-% \changes{2.0}{2024/01/01}{Use a separate namespace for the keys to avoid
+% \changes{2.0}{2024/01/04}{Use a separate namespace for the keys to avoid
 %   unfavorable influence on \cmd\includegraphics.}
 % \begin{macro}{\OVP@calc@rel}
 % Some calculations in rel mode. The bigger value of width or height
@@ -323,6 +323,25 @@
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{graphicx}}
 \ExecuteOptions{percent}
 \ProcessOptions
+\AtBeginDocument{%
+  \@ifpackageloaded{xkeyval}{%
+    \def\OVP@setkeys@relaxed{%
+      \let\OVP@setkeys\setkeys
+      \def\setkeys{\OVP@setkeys*}
+    }
+    \def\OVP@setkeys@strict{%
+      \let\setkeys\OVP@setkeys
+    }
+  }{%
+    \def\OVP@setkeys@relaxed{%
+      \let\OVP@KV@errx\KV@errx
+      \let\KV@errx\@gobble
+    }
+    \def\OVP@setkeys@strict{%
+      \let\KV@errx\OVP@KV@errx
+    }
+  }
+}
 \newsavebox\OVP@box
 %    \end{macrocode}
 %
@@ -331,20 +350,20 @@
 % \changes{1.2}{2018/09/02}{Wrong place of \cmd\setkeys
 %   (bug report from 'aminophen')}
 % \changes{2.0}{2024/01/04}{Better key handling}
+% \changes{2.1}{2024/01/06}{Consideration of xkeyval's \cmd\setkeys}
 %    \begin{macrocode}
 \newenvironment{overpic}[2][]{%
-  \let\OVP@temp=\KV@errx
 %    \end{macrocode}
 % Silently ignore unknown keys.
 %    \begin{macrocode}
-  \let\KV@errx\@gobble
+  \OVP@setkeys@relaxed
   \sbox\OVP@box{\includegraphics[#1]{#2}}%
   \count@=\z@ \OVP@gridfalse
   \setkeys{OVP}{#1}%
 %    \end{macrocode}
-% Reset to previous state.
+% Stop ignoring unknown keys.
 %    \begin{macrocode}
-  \let\KV@errx\OVP@temp
+  \OVP@setkeys@strict
   \OVP@picture{#1}%
 }{\endpicture}
 %    \end{macrocode}
