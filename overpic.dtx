@@ -19,7 +19,7 @@
 %
 %<*package>
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
-\ProvidesPackage{overpic}[2024/01/06 2.1 picture overlays (RN)]
+\ProvidesPackage{overpic}[2025/01/06 2.2 picture overlays (RN)]
 %</package>
 %
 %<*driver>
@@ -58,7 +58,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{199}
+% \CheckSum{203}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -147,12 +147,18 @@
 %   \item |unit|: Sets \cmd{\unitlength} (any \TeX\ dimension, only
 %     effective in abs mode).
 % \end{itemize}
+% The macros \cmd\width, \cmd\height, \cmd\depth, and \cmd\totalheight\ are
+% defined within the environment. They contain the dimensions of the graphic
+% (parameter 2).
+%
 % \DescribeEnv{Overpic}
 % |\begin{Overpic}[|\meta{options}|]{|\meta{\TeX\ code}|}|
 %  \meta{picture code} |\end{Overpic}| \par
 %  Similar to environment |overpic| but instead of a graphic any
 %  \TeX\ code (e.g. a tabular) is set as basement of the following picture
-%  overlay.
+%  overlay. The macros \cmd\width, \cmd\height, \cmd\depth, and
+% \cmd\totalheight\ are defined within the environment. They contain the
+% dimensions of the box created by the \TeX\ code (parameter 2).
 %
 % \DescribeMacro\setOverpic
 % \cmd{\setOverpic}|{|\meta{options}|}| \par
@@ -351,6 +357,7 @@
 %   (bug report from 'aminophen')}
 % \changes{2.0}{2024/01/04}{Better key handling}
 % \changes{2.1}{2024/01/06}{Consideration of xkeyval's \cmd\setkeys}
+% \changes{2.2}{2025/01/06}{Added \cmd\@end@tempboxa}
 %    \begin{macrocode}
 \newenvironment{overpic}[2][]{%
 %    \end{macrocode}
@@ -364,24 +371,26 @@
 % Stop ignoring unknown keys.
 %    \begin{macrocode}
   \OVP@setkeys@strict
-  \OVP@picture{#1}%
-}{\endpicture}
+  \OVP@picture{#2}%
+}{\endpicture\@end@tempboxa}
 %    \end{macrocode}
 % \end{environment}
 % \begin{environment}{Overpic}
 % \changes{1.0}{2017/10/06}{Suggested by \mbox{Herbert Vo\ss}}
 % \changes{1.3}{2020/02/22}{Added missing \cmd\setkeys}
+% \changes{2.2}{2025/01/06}{Added \cmd\@end@tempboxa}
 % Box \cmd{\OVP@box} gets any \TeX\ code.
 %    \begin{macrocode}
 \newenvironment{Overpic}[2][]{%
   \sbox\OVP@box{#2}%
   \count@=\z@ \OVP@gridfalse
   \setkeys{OVP}{#1}%  
-  \OVP@picture{#1}%
-}{\endpicture}
+  \OVP@picture{#2}%
+}{\endpicture\@end@tempboxa}
 %    \end{macrocode}
 % \end{environment}
 % \begin{macro}{\OVP@picture}
+% \changes{2.2}{2025/01/06}{Added \cmd\@begin@tempboxa}
 % Put box \cmd{\OVP@box} and a optionally grid at the lower left corner of a
 % picture environment. 
 %    \begin{macrocode}
@@ -391,6 +400,7 @@
   \advance\@tempcntb\@tempcnta
   \settowidth{\@tempcnta}{\usebox\OVP@box}%
   \OVP@calc
+  \@begin@tempboxa\hbox{#1}%
   \picture(\@tempcnta,\@tempcntb)%
     \put(0,0){\makebox(0,0)[bl]{\usebox\OVP@box}}%
     \ifOVP@grid
