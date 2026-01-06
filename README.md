@@ -8,4 +8,4 @@ resulting picture environment has the same dimensions as the included
 object. LaTeX commands can be placed on the object at any position;
 setting a grid for the orientation is possible.
 
-                                  Rolf Niepraschk, 2024/01/06
+                                  Rolf Niepraschk, 2026/01/06
