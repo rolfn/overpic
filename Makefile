@@ -1,4 +1,4 @@
-# Rolf Niepraschk, 2024-01-04, Rolf.Niepraschk@gmx.de
+# Rolf Niepraschk, 2026-01-07, Rolf.Niepraschk@gmx.de
 
 .SUFFIXES : .tex .ltx .dvi .ps .pdf .eps
 
@@ -22,7 +22,7 @@ $(MAIN).sty : $(MAIN).dtx
 $(MAIN)-readme.pdf $(MAIN)-readme-de.pdf : $(MAIN)-readme.tex $(MAIN).sty
 	$(PDFLATEX) $<
 
-$(MAIN).pdf : $(MAIN).dtx
+$(MAIN).pdf : $(MAIN).dtx $(MAIN).sty
 	if ! test -f $(basename $<).glo ; then touch $(basename $<).glo; fi
 	if ! test -f $(basename $<).idx ; then touch $(basename $<).idx; fi
 	makeindex -s gglo.ist -t $(basename $<).glg -o $(basename $<).gls \
