@@ -58,7 +58,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{203}
+% \CheckSum{210}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -197,7 +197,7 @@
 % \par\medskip\pagebreak[3]
 % \begin{overpic}[scale=.25,percent,grid]{golfer.eps}
 %   \put(5,45){\color{blue}\huge\LaTeX}
-%   \put(55,10){\color{red}%
+%   \put(56,10){\color{red}%
 %     \frame{\includegraphics[scale=.07]{golfer.eps}}}
 % \end{overpic}
 %  
@@ -349,6 +349,7 @@
   }
 }
 \newsavebox\OVP@box
+\newdimen\OVP@totalheight
 %    \end{macrocode}
 %
 % \begin{environment}{overpic}
@@ -371,8 +372,8 @@
 % Stop ignoring unknown keys.
 %    \begin{macrocode}
   \OVP@setkeys@strict
-  \OVP@picture{#2}%
-}{\endpicture\@end@tempboxa}
+  \OVP@picture
+}{\endpicture}
 %    \end{macrocode}
 % \end{environment}
 % \begin{environment}{Overpic}
@@ -385,8 +386,8 @@
   \sbox\OVP@box{#2}%
   \count@=\z@ \OVP@gridfalse
   \setkeys{OVP}{#1}%  
-  \OVP@picture{#2}%
-}{\endpicture\@end@tempboxa}
+  \OVP@picture
+}{\endpicture}
 %    \end{macrocode}
 % \end{environment}
 % \begin{macro}{\OVP@picture}
@@ -394,13 +395,16 @@
 % Put box \cmd{\OVP@box} and a optionally grid at the lower left corner of a
 % picture environment. 
 %    \begin{macrocode}
-\newcommand*\OVP@picture[1]{%
-  \settodepth{\@tempcnta}{\usebox\OVP@box}%
-  \settoheight{\@tempcntb}{\usebox\OVP@box}%
-  \advance\@tempcntb\@tempcnta
-  \settowidth{\@tempcnta}{\usebox\OVP@box}%
+\newcommand*\OVP@picture{%
+  \def\width{\wd\OVP@box}%
+  \def\height{\ht\OVP@box}%
+  \def\depth{\dp\OVP@box}%
+  \let\totalheight\OVP@totalheight
+  \totalheight=\height
+  \advance\totalheight\depth
+  \@tempcnta=\width
+  \@tempcntb=\totalheight
   \OVP@calc
-  \@begin@tempboxa\hbox{#1}%
   \picture(\@tempcnta,\@tempcntb)%
     \put(0,0){\makebox(0,0)[bl]{\usebox\OVP@box}}%
     \ifOVP@grid
